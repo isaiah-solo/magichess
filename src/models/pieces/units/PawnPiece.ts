@@ -1,10 +1,11 @@
 import {BoardPos} from '../../../types/BoardPos';
+import compactMap from '../../../utils/compactMap';
 import {
-  castY,
-  coordinatesToPos,
+  multiPosPaths,
+  posForDown,
+  posForUp,
   posToCoordinates,
 } from '../../../utils/coordinates';
-import filterNulls from '../../../utils/filterNulls';
 import range from '../../../utils/range';
 import Piece from '../Piece';
 import Team from '../Team';
@@ -14,31 +15,17 @@ export default class PawnPiece extends Piece {
     super('Pawn', team);
   }
 
-  public getValidPositions(pos: number): BoardPos[][] {
-    const [x, y] = posToCoordinates(pos);
+  public getValidPositions(pos: BoardPos): BoardPos[][] {
+    const [_x, y] = posToCoordinates(pos);
 
-    return [
-      filterNulls(
-        this.getTeam() === Team.Two
-          ? range(y === 6 ? 2 : 1).map(pos => {
-              if (y - (pos + 1) < 0) {
-                return null;
-              }
-              return coordinatesToPos([x, castY(y - (pos + 1))]);
-            })
-          : [],
-      ),
+    return multiPosPaths([
+      this.getTeam() === Team.Two
+        ? compactMap(range(y === 6 ? 2 : 1), idx => posForUp(pos, idx))
+        : [],
 
-      filterNulls(
-        this.getTeam() === Team.One
-          ? range(y === 1 ? 2 : 1).map(pos => {
-              if (y + pos + 1 >= 8) {
-                return null;
-              }
-              return coordinatesToPos([x, castY(y + pos + 1)]);
-            })
-          : [],
-      ),
-    ];
+      this.getTeam() === Team.One
+        ? compactMap(range(y === 1 ? 2 : 1), idx => posForDown(pos, idx))
+        : [],
+    ]);
   }
 }

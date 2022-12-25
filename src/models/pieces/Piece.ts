@@ -30,7 +30,7 @@ export default abstract class Piece {
     };
   }
 
-  public getValidPositions(_pos: number): BoardPos[][] {
+  public getValidPositions(_pos: BoardPos): BoardPos[][] {
     throw new Error('Method "getValidPositions()" must be implemented.');
   }
 }

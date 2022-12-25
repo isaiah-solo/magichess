@@ -4,6 +4,7 @@ import {movePiece, selectSlots} from '../../state/game/boardSlice';
 import {useGameDispatch, useGameSelector} from '../../state/game/gameHooks';
 import {BoardPos} from '../../types/BoardPos';
 import {NumberRange} from '../../types/NumberRange';
+import {castPos} from '../../utils/coordinates';
 import range from '../../utils/range';
 import Piece from './Piece';
 import PossibleMoveDot from './PossibleMoveDot';
@@ -21,65 +22,67 @@ export default function Board() {
 
   const tiles = useMemo(
     () =>
-      range(32).map(pos => {
-        const row = Math.floor(pos / 4);
-        const colorPos = row % 2 === 0 ? pos + 1 : pos;
+      range(32)
+        .map(castPos)
+        .map(pos => {
+          const row = Math.floor(pos / 4);
+          const colorPos = row % 2 === 0 ? pos + 1 : pos;
 
-        const piece = pieces[pos] ?? null;
+          const piece = pieces[pos] ?? null;
 
-        const posIsValid = validPositions
-          .map(validPositionArr => {
-            for (const validPos of validPositionArr) {
-              if (pieces[validPos] !== null) {
-                return false;
+          const posIsValid = validPositions
+            .map(validPositionArr => {
+              for (const validPos of validPositionArr) {
+                if (pieces[validPos] !== null) {
+                  return false;
+                }
+
+                if (validPos === pos) {
+                  return true;
+                }
               }
 
-              if (validPos === pos) {
-                return true;
-              }
-            }
+              return false;
+            })
+            .reduce((acc, result) => acc || result, false);
 
-            return false;
-          })
-          .reduce((acc, result) => acc || result, false);
+          if (posIsValid) {
+            return (
+              <Tile
+                color={colorPos % 2 === 0 ? Color.Positive : Color.Negative}
+                key={pos}
+                onClick={() => {
+                  setFocusedPiecePos(null);
+                  setValidPositions([]);
 
-        if (posIsValid) {
+                  if (focusedPiecePos === null) {
+                    return;
+                  }
+
+                  dispatch(movePiece({from: focusedPiecePos, to: pos}));
+                }}>
+                <PossibleMoveDot />
+              </Tile>
+            );
+          }
+
           return (
             <Tile
               color={colorPos % 2 === 0 ? Color.Positive : Color.Negative}
-              key={pos}
-              onClick={() => {
-                setFocusedPiecePos(null);
-                setValidPositions([]);
-
-                if (focusedPiecePos === null) {
-                  return;
-                }
-
-                dispatch(movePiece({from: focusedPiecePos, to: pos}));
-              }}>
-              <PossibleMoveDot />
+              key={pos}>
+              {piece !== null && (
+                <Piece
+                  onClick={() => {
+                    setFocusedPiecePos(pos);
+                    setValidPositions(piece.getValidPositions(pos));
+                  }}
+                  team={piece.getTeam()}>
+                  {piece.getName()}
+                </Piece>
+              )}
             </Tile>
           );
-        }
-
-        return (
-          <Tile
-            color={colorPos % 2 === 0 ? Color.Positive : Color.Negative}
-            key={pos}>
-            {piece !== null && (
-              <Piece
-                onClick={() => {
-                  setFocusedPiecePos(pos);
-                  setValidPositions(piece.getValidPositions(pos));
-                }}
-                team={piece.getTeam()}>
-                {piece.getName()}
-              </Piece>
-            )}
-          </Tile>
-        );
-      }),
+        }),
     [pieces, validPositions],
   );
 
