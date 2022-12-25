@@ -3,8 +3,13 @@ import compactMap from '../../../utils/compactMap';
 import {
   multiPosPaths,
   posForDown,
+  posForDownLeft,
+  posForDownRight,
   posForUp,
+  posForUpLeft,
+  posForUpRight,
   posToCoordinates,
+  singlePosPaths,
 } from '../../../utils/coordinates';
 import range from '../../../utils/range';
 import Piece from '../Piece';
@@ -26,6 +31,16 @@ export default class PawnPiece extends Piece {
       this.getTeam() === Team.One
         ? compactMap(range(y === 1 ? 2 : 1), idx => posForDown(pos, idx))
         : [],
+    ]);
+  }
+
+  public getValidCaptures(pos: BoardPos): BoardPos[][] {
+    return singlePosPaths([
+      this.getTeam() === Team.Two ? posForUpLeft(pos) : null,
+      this.getTeam() === Team.Two ? posForUpRight(pos) : null,
+
+      this.getTeam() === Team.One ? posForDownLeft(pos) : null,
+      this.getTeam() === Team.One ? posForDownRight(pos) : null,
     ]);
   }
 }

@@ -30,4 +30,8 @@ export default class KingPiece extends Piece {
       posForLeft(pos),
     ]);
   }
+
+  public getValidCaptures(pos: BoardPos): BoardPos[][] {
+    return this.getValidPositions(pos);
+  }
 }

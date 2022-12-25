@@ -26,16 +26,7 @@ export default function Tile({children = null, color, onClick}: Props) {
         position: 'relative',
         width: 80,
       }}>
-      <div
-        style={{
-          left: '50%',
-          position: 'relative',
-          top: '50%',
-          transform: 'translateY(-50%) translateX(-50%)',
-          width: 'fit-content',
-        }}>
-        {children}
-      </div>
+      {children}
     </div>
   );
 }

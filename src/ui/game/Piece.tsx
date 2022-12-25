@@ -1,4 +1,5 @@
 import {ReactNode} from 'react';
+import PieceModel from '../../models/pieces/Piece';
 import Team from '../../models/pieces/Team';
 
 const TEAM_COLOR_MAP = {
@@ -7,17 +8,19 @@ const TEAM_COLOR_MAP = {
 };
 
 type Props = {
-  children?: ReactNode | null;
+  isHighlighted?: boolean;
   onClick?: () => void;
-  team: Team;
+  piece: PieceModel;
 };
 
-export default function Piece({children = null, onClick, team}: Props) {
+export default function Piece({isHighlighted = false, onClick, piece}: Props) {
   return (
     <div
       onClick={onClick}
       style={{
-        backgroundColor: TEAM_COLOR_MAP[team],
+        backgroundColor: !isHighlighted
+          ? TEAM_COLOR_MAP[piece.getTeam()]
+          : '#f5e0b7',
         border: '1px solid #191919',
         borderRadius: '50%',
         cursor: 'pointer',
@@ -32,7 +35,7 @@ export default function Piece({children = null, onClick, team}: Props) {
           transform: 'translateY(-50%) translateX(-50%)',
           width: 'fit-content',
         }}>
-        {children}
+        {piece.getName()}
       </div>
     </div>
   );

@@ -12,6 +12,10 @@ export function posToCoordinates(pos: number): Coordinates {
   return [castX(pos % 4), castY(Math.floor(pos / 4))];
 }
 
+export function boardRangeMap<T>(cb: (idx: BoardPos) => T): T[] {
+  return range(32).map(castPos).map(cb);
+}
+
 export function leftRangeMap(
   pos: BoardPos,
   cb: (idx: XPosNumber) => BoardPos | null,

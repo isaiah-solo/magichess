@@ -20,4 +20,8 @@ export default class KnightPiece extends Piece {
       posForOffset(pos, [2, 1]),
     ]);
   }
+
+  public getValidCaptures(pos: BoardPos): BoardPos[][] {
+    return this.getValidPositions(pos);
+  }
 }

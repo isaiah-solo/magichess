@@ -33,4 +33,8 @@ export default abstract class Piece {
   public getValidPositions(_pos: BoardPos): BoardPos[][] {
     throw new Error('Method "getValidPositions()" must be implemented.');
   }
+
+  public getValidCaptures(_pos: BoardPos): BoardPos[][] {
+    throw new Error('Method "getValidCaptures()" must be implemented.');
+  }
 }

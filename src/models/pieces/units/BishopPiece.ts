@@ -23,4 +23,8 @@ export default class BishopPiece extends Piece {
       rightRangeMap(pos, idx => posForDownLeft(pos, idx)),
     ];
   }
+
+  public getValidCaptures(pos: BoardPos): BoardPos[][] {
+    return this.getValidPositions(pos);
+  }
 }

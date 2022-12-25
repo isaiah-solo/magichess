@@ -26,4 +26,8 @@ export default class RookPiece extends Piece {
       downRangeMap(pos, idx => posForDown(pos, idx)),
     ]);
   }
+
+  public getValidCaptures(pos: BoardPos): BoardPos[][] {
+    return this.getValidPositions(pos);
+  }
 }
