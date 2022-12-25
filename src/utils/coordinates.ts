@@ -1,16 +1,18 @@
-import {NumberRange} from '../types/NumberRange';
+import {BoardPos} from '../types/BoardPos';
+import {XPosNumber} from '../types/XPosNumber';
+import {YPosNumber} from '../types/YPosNumber';
 
-export type Coordinates = [x: NumberRange<0, 4>, y: NumberRange<0, 8>];
+export type Coordinates = [x: XPosNumber, y: YPosNumber];
 
 export function posToCoordinates(pos: number): Coordinates {
   return [castX(pos % 4), castY(Math.floor(pos / 4))];
 }
 
-export function coordinatesToPos(coordinates: Coordinates): NumberRange<0, 32> {
+export function coordinatesToPos(coordinates: Coordinates): BoardPos {
   return castPos(coordinates[0] + coordinates[1] * 4);
 }
 
-export function castX(coordinate: number): NumberRange<0, 4> {
+export function castX(coordinate: number): XPosNumber {
   if (
     coordinate === 0 ||
     coordinate === 1 ||
@@ -23,7 +25,7 @@ export function castX(coordinate: number): NumberRange<0, 4> {
   throw new Error('Method "castX" casted an invalid coordinate number.');
 }
 
-export function castY(coordinate: number): NumberRange<0, 8> {
+export function castY(coordinate: number): YPosNumber {
   if (
     coordinate === 0 ||
     coordinate === 1 ||
@@ -40,7 +42,7 @@ export function castY(coordinate: number): NumberRange<0, 8> {
   throw new Error('Method "castY" casted an invalid coordinate number.');
 }
 
-export function castPos(coordinate: number): NumberRange<0, 32> {
+export function castPos(coordinate: number): BoardPos {
   if (
     coordinate === 0 ||
     coordinate === 1 ||

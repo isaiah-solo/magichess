@@ -19,7 +19,7 @@ export const boardSlice = createSlice({
   reducers: {
     movePiece: (
       state,
-      action: PayloadAction<{from: BoardPos; to: NumberRange<0, 32>}>,
+      action: PayloadAction<{from: BoardPos; to: BoardPos}>,
     ) => {
       const piece = state.slots[action.payload.from];
 
