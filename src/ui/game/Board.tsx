@@ -10,6 +10,7 @@ import PossibleMoveDot from './PossibleMoveDot';
 import Tile, {Color} from './Tile';
 import TileContent from './TileContent';
 import compactMap from '../../utils/compactMap';
+import getTileColorForPos from '../../utils/getTileColorForPos';
 
 export default function Board() {
   const [focusedPiecePos, setFocusedPiecePos] = useState<BoardPos | null>(null);
@@ -30,7 +31,13 @@ export default function Board() {
   }, [setFocusedPiecePos, setValidPositions]);
 
   const setSelectionOnPiece = useCallback(
-    (pos: BoardPos, piece: PieceModel) => {
+    (pos: BoardPos) => {
+      const piece = pieces[pos] ?? null;
+
+      if (piece === null) {
+        return;
+      }
+
       setFocusedPiecePos(pos);
 
       const boardValidPositions = piece.getValidPositions(pos);
@@ -57,8 +64,14 @@ export default function Board() {
       setValidCaptures(
         compactMap(boardValidCaptures, validCaptureArr => {
           for (const validPos of validCaptureArr) {
-            if (pieces[validPos] === null) {
+            const pieceAtPos = pieces[validPos];
+
+            if (pieceAtPos === null) {
               continue;
+            }
+
+            if (!piece.isPieceOnOppositeTeam(pieceAtPos)) {
+              return [];
             }
 
             return [validPos];
@@ -70,13 +83,14 @@ export default function Board() {
           .reduce((acc, pos) => ({...acc, [pos]: true}), {}),
       );
     },
-    [setFocusedPiecePos, setValidPositions],
+    [pieces, setFocusedPiecePos, setValidPositions],
   );
 
   const dispatchMovePiece = useCallback(
     (to: BoardPos) => {
+      clearSelectionState();
+
       if (focusedPiecePos === null) {
-        clearSelectionState();
         return;
       }
 
@@ -89,41 +103,27 @@ export default function Board() {
   const tiles = useMemo(
     () =>
       boardRangeMap(pos => {
-        const row = Math.floor(pos / 4);
-        const colorPos = row % 2 === 0 ? pos + 1 : pos;
-
         const piece = pieces[pos] ?? null;
 
         const posIsValidMove = validPositions.hasOwnProperty(pos);
         const posIsValidCapture = validCaptures.hasOwnProperty(pos);
 
         return (
-          <Tile
-            color={colorPos % 2 === 0 ? Color.Positive : Color.Negative}
-            key={pos}>
+          <Tile color={getTileColorForPos(pos)} key={pos}>
             {posIsValidMove && piece === null && (
               <TileContent>
-                <PossibleMoveDot
-                  onClick={() => {
-                    clearSelectionState();
-                    dispatchMovePiece(pos);
-                  }}
-                />
+                <PossibleMoveDot onClick={() => dispatchMovePiece(pos)} />
               </TileContent>
             )}
             {piece !== null && (
               <TileContent>
                 <Piece
                   isHighlighted={posIsValidCapture}
-                  onClick={() => {
-                    if (posIsValidCapture) {
-                      clearSelectionState();
-                      dispatchMovePiece(pos);
-                      return;
-                    }
-
-                    setSelectionOnPiece(pos, piece);
-                  }}
+                  onClick={() =>
+                    posIsValidCapture
+                      ? dispatchMovePiece(pos)
+                      : setSelectionOnPiece(pos)
+                  }
                   piece={piece}
                 />
               </TileContent>

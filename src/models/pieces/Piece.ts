@@ -30,6 +30,10 @@ export default abstract class Piece {
     };
   }
 
+  public isPieceOnOppositeTeam(piece: Piece): boolean {
+    return this.team !== piece.team;
+  }
+
   public getValidPositions(_pos: BoardPos): BoardPos[][] {
     throw new Error('Method "getValidPositions()" must be implemented.');
   }
