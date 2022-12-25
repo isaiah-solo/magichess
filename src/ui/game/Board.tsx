@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {useMemo, useState} from 'react';
+import {useState} from 'react';
 import {movePiece, selectSlots} from '../../state/game/boardSlice';
 import {useGameDispatch, useGameSelector} from '../../state/game/gameHooks';
 import {BoardPos} from '../../types/BoardPos';
@@ -20,7 +20,7 @@ export default function Board() {
     [pos: number]: boolean;
   }>([]);
 
-  const pieces = useGameSelector(selectSlots);
+  const slots = useGameSelector(selectSlots);
   const dispatch = useGameDispatch();
 
   const clearSelectionState = useCallback(() => {
@@ -30,8 +30,8 @@ export default function Board() {
   }, [setFocusedPiecePos, setValidPositions]);
 
   const setSelectionOnPiece = useCallback(
-    (pos: BoardPos) => {
-      const piece = pieces[pos] ?? null;
+    (pos: BoardPos): void => {
+      const piece = slots[pos] ?? null;
 
       if (piece === null) {
         return;
@@ -47,7 +47,7 @@ export default function Board() {
           let result: BoardPos[] = [];
 
           for (const validPos of validPositionArr) {
-            if (pieces[validPos] !== null) {
+            if (slots[validPos] !== null) {
               return result;
             }
 
@@ -63,7 +63,7 @@ export default function Board() {
       setValidCaptures(
         compactMap(boardValidCaptures, validCaptureArr => {
           for (const validPos of validCaptureArr) {
-            const pieceAtPos = pieces[validPos];
+            const pieceAtPos = slots[validPos];
 
             if (pieceAtPos === null) {
               continue;
@@ -82,11 +82,11 @@ export default function Board() {
           .reduce((acc, pos) => ({...acc, [pos]: true}), {}),
       );
     },
-    [pieces, setFocusedPiecePos, setValidPositions],
+    [setFocusedPiecePos, setValidPositions, slots],
   );
 
   const dispatchMovePiece = useCallback(
-    (to: BoardPos) => {
+    (to: BoardPos): void => {
       clearSelectionState();
 
       if (focusedPiecePos === null) {
@@ -94,15 +94,25 @@ export default function Board() {
       }
 
       dispatch(movePiece({from: focusedPiecePos, to}));
-      clearSelectionState();
     },
     [clearSelectionState, dispatch, focusedPiecePos],
   );
 
-  const tiles = useMemo(
-    () =>
-      boardRangeMap(pos => {
-        const piece = pieces[pos] ?? null;
+  return (
+    <div
+      style={{
+        border: '1px solid #191919',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+        height: 640,
+        left: '50%',
+        position: 'relative',
+        top: '50%',
+        transform: 'translateY(-50%) translateX(-50%)',
+        width: 320,
+      }}>
+      {boardRangeMap(pos => {
+        const piece = slots[pos] ?? null;
 
         const posIsValidMove = validPositions.hasOwnProperty(pos);
         const posIsValidCapture = validCaptures.hasOwnProperty(pos);
@@ -129,31 +139,7 @@ export default function Board() {
             )}
           </Tile>
         );
-      }),
-    [
-      clearSelectionState,
-      dispatchMovePiece,
-      pieces,
-      setSelectionOnPiece,
-      validCaptures,
-      validPositions,
-    ],
-  );
-
-  return (
-    <div
-      style={{
-        border: '1px solid #191919',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-        height: 640,
-        left: '50%',
-        position: 'relative',
-        top: '50%',
-        transform: 'translateY(-50%) translateX(-50%)',
-        width: 320,
-      }}>
-      {tiles}
+      })}
     </div>
   );
 }
