@@ -9,11 +9,16 @@ import Piece from './Piece';
 import PossibleMoveDot from './PossibleMoveDot';
 import Tile, {Color} from './Tile';
 import TileContent from './TileContent';
+import compactMap from '../../utils/compactMap';
 
 export default function Board() {
   const [focusedPiecePos, setFocusedPiecePos] = useState<BoardPos | null>(null);
-  const [validPositions, setValidPositions] = useState<BoardPos[][]>([]);
-  const [validCaptures, setValidCaptures] = useState<BoardPos[][]>([]);
+  const [validPositions, setValidPositions] = useState<{
+    [pos: number]: boolean;
+  }>([]);
+  const [validCaptures, setValidCaptures] = useState<{
+    [pos: number]: boolean;
+  }>([]);
 
   const pieces = useGameSelector(selectSlots);
   const dispatch = useGameDispatch();
@@ -24,11 +29,46 @@ export default function Board() {
     setValidCaptures([]);
   }, [setFocusedPiecePos, setValidPositions]);
 
-  const setFocusOnPiece = useCallback(
+  const setSelectionOnPiece = useCallback(
     (pos: BoardPos, piece: PieceModel) => {
       setFocusedPiecePos(pos);
-      setValidPositions(piece.getValidPositions(pos));
-      setValidCaptures(piece.getValidCaptures(pos));
+
+      const boardValidPositions = piece.getValidPositions(pos);
+      const boardValidCaptures = piece.getValidCaptures(pos);
+
+      setValidPositions(
+        compactMap(boardValidPositions, validPositionArr => {
+          let result: BoardPos[] = [];
+
+          for (const validPos of validPositionArr) {
+            if (pieces[validPos] !== null) {
+              return result;
+            }
+
+            result = [...result, validPos];
+          }
+
+          return result;
+        })
+          .flatMap(x => x)
+          .reduce((acc, pos) => ({...acc, [pos]: true}), {}),
+      );
+
+      setValidCaptures(
+        compactMap(boardValidCaptures, validCaptureArr => {
+          for (const validPos of validCaptureArr) {
+            if (pieces[validPos] === null) {
+              continue;
+            }
+
+            return [validPos];
+          }
+
+          return [];
+        })
+          .flatMap(x => x)
+          .reduce((acc, pos) => ({...acc, [pos]: true}), {}),
+      );
     },
     [setFocusedPiecePos, setValidPositions],
   );
@@ -54,39 +94,8 @@ export default function Board() {
 
         const piece = pieces[pos] ?? null;
 
-        if (pos === 5 || pos === 7) {
-          console.log(validCaptures);
-        }
-
-        const posIsValidMove = validPositions
-          .map(validPositionArr => {
-            for (const validPos of validPositionArr) {
-              if (pieces[validPos] !== null) {
-                return false;
-              }
-
-              if (validPos === pos) {
-                return true;
-              }
-            }
-
-            return false;
-          })
-          .reduce((acc, result) => acc || result, false);
-
-        const posIsValidCapture = validCaptures
-          .map(validPositionArr => {
-            for (const validPos of validPositionArr) {
-              if (pieces[validPos] === null || validPos !== pos) {
-                continue;
-              }
-
-              return true;
-            }
-
-            return false;
-          })
-          .reduce((acc, result) => acc || result, false);
+        const posIsValidMove = validPositions.hasOwnProperty(pos);
+        const posIsValidCapture = validCaptures.hasOwnProperty(pos);
 
         return (
           <Tile
@@ -108,11 +117,12 @@ export default function Board() {
                   isHighlighted={posIsValidCapture}
                   onClick={() => {
                     if (posIsValidCapture) {
+                      clearSelectionState();
                       dispatchMovePiece(pos);
                       return;
                     }
 
-                    setFocusOnPiece(pos, piece);
+                    setSelectionOnPiece(pos, piece);
                   }}
                   piece={piece}
                 />
@@ -125,8 +135,9 @@ export default function Board() {
       clearSelectionState,
       dispatchMovePiece,
       pieces,
+      setSelectionOnPiece,
+      validCaptures,
       validPositions,
-      setFocusOnPiece,
     ],
   );
 
