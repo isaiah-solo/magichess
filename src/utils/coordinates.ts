@@ -3,6 +3,7 @@ import {XPosNumber} from '../types/XPosNumber';
 import {YPosNumber} from '../types/YPosNumber';
 import compactMap from './compactMap';
 import filterNulls from './filterNulls';
+import hasAtLeastOneElement from './hasAtLeastOneElement';
 import range from './range';
 
 export type Coordinates = [x: number, y: number];
@@ -113,7 +114,7 @@ export function singlePosPaths(posArray: (BoardPos | null)[]): BoardPos[][] {
 }
 
 export function multiPosPaths(posArray: (BoardPos | null)[][]): BoardPos[][] {
-  return filterNulls(posArray.map(filterNulls).filter(path => path.length > 0));
+  return filterNulls(posArray.map(filterNulls).filter(hasAtLeastOneElement));
 }
 
 export function castPos(coordinate: number): BoardPos {
