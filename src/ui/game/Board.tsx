@@ -5,6 +5,12 @@ import PossibleMoveDot from './PossibleMoveDot';
 import Tile from './Tile';
 import TileContent from './TileContent';
 import getTileColorForPos from '../../utils/getTileColorForPos';
+import {
+  useCheckAndAssumeWinnerEffect,
+  useFinishTurn,
+  useSelectCurrentTurn,
+  useSelectWinner,
+} from '../../state/game/gameSlice';
 
 export default function Board() {
   const slots = useSelectSlots();
@@ -15,6 +21,12 @@ export default function Board() {
     checkIsCaptureValid,
     checkIsPosValid,
   } = useBoardActions();
+
+  const currentTurn = useSelectCurrentTurn();
+  const winner = useSelectWinner();
+  const finishTurn = useFinishTurn();
+
+  useCheckAndAssumeWinnerEffect();
 
   return (
     <div
@@ -36,18 +48,31 @@ export default function Board() {
           <Tile color={getTileColorForPos(pos)} key={pos}>
             {checkIsPosValid(pos) && piece === null && (
               <TileContent>
-                <PossibleMoveDot onClick={() => actionMovePiece(pos)} />
+                <PossibleMoveDot
+                  onClick={() => {
+                    actionMovePiece(pos);
+                    finishTurn();
+                  }}
+                />
               </TileContent>
             )}
             {piece !== null && (
               <TileContent>
                 <Piece
                   isHighlighted={checkIsCaptureValid(pos)}
-                  onClick={() =>
-                    checkIsCaptureValid(pos)
-                      ? actionMovePiece(pos)
-                      : actionSelectPiece(pos)
-                  }
+                  onClick={() => {
+                    if (checkIsCaptureValid(pos)) {
+                      actionMovePiece(pos);
+                      finishTurn();
+                      return;
+                    }
+
+                    if (piece.getTeam() !== currentTurn || winner !== null) {
+                      return;
+                    }
+
+                    actionSelectPiece(pos);
+                  }}
                   piece={piece}
                 />
               </TileContent>
