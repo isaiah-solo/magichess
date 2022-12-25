@@ -39,12 +39,22 @@ export const boardSlice = createSlice({
   },
 });
 
+/**
+ * Provides the list of slots and its state in regard to pieces
+ *
+ * @returns BoardSlot[]
+ */
 export const useSelectSlots = (): BoardSlot[] => {
   return useGameSelector(
     (state: RootState): BoardSlot[] => state.boardState.slots,
   );
 };
 
+/**
+ * Provides board actions to manipulate pieces
+ *
+ * @returns BoardActions
+ */
 export const useBoardActions = (): BoardActions => {
   const [focusedPiecePos, setFocusedPiecePos] = useState<BoardPos | null>(null);
   const [validPositions, setValidPositions] = useState<{
