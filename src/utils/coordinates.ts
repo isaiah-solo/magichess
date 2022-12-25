@@ -12,10 +12,6 @@ export function posToCoordinates(pos: number): Coordinates {
   return [castX(pos % 4), castY(Math.floor(pos / 4))];
 }
 
-export function coordinatesToPos(coordinates: Coordinates): BoardPos {
-  return castPos(coordinates[0] + coordinates[1] * 4);
-}
-
 export function leftRangeMap(
   pos: BoardPos,
   cb: (idx: XPosNumber) => BoardPos | null,
@@ -117,6 +113,12 @@ export function multiPosPaths(posArray: (BoardPos | null)[][]): BoardPos[][] {
   return filterNulls(posArray.map(filterNulls).filter(hasAtLeastOneElement));
 }
 
+export function mergePosPaths(...posArrays: BoardPos[][][]): BoardPos[][] {
+  const [firstPosArray, restPosArrays] = posArrays;
+
+  return firstPosArray.concat(...restPosArrays);
+}
+
 export function castPos(coordinate: number): BoardPos {
   if (
     coordinate === 0 ||
@@ -156,6 +158,10 @@ export function castPos(coordinate: number): BoardPos {
   }
 
   throw new Error('Method "castPos" casted an invalid coordinate number.');
+}
+
+function coordinatesToPos(coordinates: Coordinates): BoardPos {
+  return castPos(coordinates[0] + coordinates[1] * 4);
 }
 
 function castX(coordinate: number): XPosNumber {
