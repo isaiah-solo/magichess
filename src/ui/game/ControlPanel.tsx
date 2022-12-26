@@ -1,7 +1,5 @@
-import {useBoardActions, useSelectSlots} from '../../state/game/boardSlice';
 import {
   useCheckAndAssumeWinnerEffect,
-  useFinishTurn,
   useSelectCurrentTurn,
   useSelectWinner,
 } from '../../state/game/gameSlice';

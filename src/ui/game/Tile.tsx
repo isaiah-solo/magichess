@@ -1,14 +1,29 @@
 import {ReactNode} from 'react';
+import styled, {css} from 'styled-components';
 
 export enum Color {
   Positive = 1,
   Negative,
 }
 
-const COLOR_MAP = {
-  [Color.Positive]: '#4d6d92',
-  [Color.Negative]: '#ececd7',
-};
+const StyledTileDiv = styled.div`
+  height: 80px;
+  position: relative;
+  width: 80px;
+
+  ${({colorType}: {colorType: Color}) => {
+    switch (colorType) {
+      case Color.Positive:
+        return css`
+          background-color: #4d6d92;
+        `;
+      case Color.Negative:
+        return css`
+          background-color: #ececd7;
+        `;
+    }
+  }}
+`;
 
 type Props = {
   children?: ReactNode | null;
@@ -18,15 +33,8 @@ type Props = {
 
 export default function Tile({children = null, color, onClick}: Props) {
   return (
-    <div
-      onClick={onClick}
-      style={{
-        backgroundColor: COLOR_MAP[color],
-        height: 80,
-        position: 'relative',
-        width: 80,
-      }}>
+    <StyledTileDiv colorType={color} onClick={onClick}>
       {children}
-    </div>
+    </StyledTileDiv>
   );
 }
