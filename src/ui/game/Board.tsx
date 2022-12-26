@@ -11,6 +11,19 @@ import {
   useSelectCurrentTurn,
   useSelectWinner,
 } from '../../state/game/gameSlice';
+import styled from 'styled-components';
+
+const StyledBoardDiv = styled.div`
+  border: 1px solid #191919;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  height: 640px;
+  left: 50%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  width: 320px;
+`;
 
 export default function Board() {
   const slots = useSelectSlots();
@@ -29,18 +42,7 @@ export default function Board() {
   useCheckAndAssumeWinnerEffect();
 
   return (
-    <div
-      style={{
-        border: '1px solid #191919',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr 1fr',
-        height: 640,
-        left: '50%',
-        position: 'relative',
-        top: '50%',
-        transform: 'translateY(-50%) translateX(-50%)',
-        width: 320,
-      }}>
+    <StyledBoardDiv>
       {boardRangeMap(pos => {
         const piece = slots[pos] ?? null;
 
@@ -80,6 +82,6 @@ export default function Board() {
           </Tile>
         );
       })}
-    </div>
+    </StyledBoardDiv>
   );
 }
