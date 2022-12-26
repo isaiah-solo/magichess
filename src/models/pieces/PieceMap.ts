@@ -3,6 +3,7 @@ import BishopPiece from './units/BishopPiece';
 import KingPiece from './units/KingPiece';
 import KnightPiece from './units/KnightPiece';
 import PawnPiece from './units/PawnPiece';
+import QueenPiece from './units/QueenPiece';
 import RookPiece from './units/RookPiece';
 
 export default function getPieceFromSerializedObj(
@@ -18,6 +19,8 @@ export default function getPieceFromSerializedObj(
       return new KnightPiece(team);
     case 'Pawn':
       return new PawnPiece(team);
+    case 'Queen':
+      return new QueenPiece(team);
     case 'Rook':
       return new RookPiece(team);
   }
