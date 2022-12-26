@@ -7,12 +7,13 @@ import {
   posForUpRight,
   rightRangeMap,
 } from '../../../utils/coordinates';
+import Classification from '../Classification';
 import Piece from '../Piece';
 import Team from '../Team';
 
 export default class BishopPiece extends Piece {
   constructor(team: Team) {
-    super('Bishop', team);
+    super('Bishop', Classification.Minor, team);
   }
 
   public getValidPositions(pos: BoardPos): BoardPos[][] {

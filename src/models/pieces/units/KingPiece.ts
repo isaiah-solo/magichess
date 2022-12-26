@@ -10,12 +10,13 @@ import {
   posForUpRight,
   singlePosPaths,
 } from '../../../utils/coordinates';
+import Classification from '../Classification';
 import Piece from '../Piece';
 import Team from '../Team';
 
 export default class KingPiece extends Piece {
   constructor(team: Team) {
-    super('King', team);
+    super('King', Classification.Leader, team);
   }
 
   public getValidPositions(pos: BoardPos): BoardPos[][] {

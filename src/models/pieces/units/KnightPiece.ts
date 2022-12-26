@@ -1,11 +1,12 @@
 import {BoardPos} from '../../../types/BoardPos';
 import {posForOffset, singlePosPaths} from '../../../utils/coordinates';
+import Classification from '../Classification';
 import Piece from '../Piece';
 import Team from '../Team';
 
 export default class KnightPiece extends Piece {
   constructor(team: Team) {
-    super('Knight', team);
+    super('Knight', Classification.Minor, team);
   }
 
   public getValidPositions(pos: BoardPos): BoardPos[][] {

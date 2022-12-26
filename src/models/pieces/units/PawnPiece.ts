@@ -12,12 +12,13 @@ import {
   singlePosPaths,
 } from '../../../utils/coordinates';
 import range from '../../../utils/range';
+import Classification from '../Classification';
 import Piece from '../Piece';
 import Team from '../Team';
 
 export default class PawnPiece extends Piece {
   constructor(team: Team) {
-    super('Pawn', team);
+    super('Pawn', Classification.Infantry, team);
   }
 
   public getValidPositions(pos: BoardPos): BoardPos[][] {

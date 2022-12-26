@@ -10,12 +10,13 @@ import {
   rightRangeMap,
   upRangeMap,
 } from '../../../utils/coordinates';
+import Classification from '../Classification';
 import Piece from '../Piece';
 import Team from '../Team';
 
 export default class RookPiece extends Piece {
   constructor(team: Team) {
-    super('Rook', team);
+    super('Rook', Classification.Major, team);
   }
 
   public getValidPositions(pos: BoardPos): BoardPos[][] {
