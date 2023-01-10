@@ -6,7 +6,7 @@ import {CHESS_DEFAULT_PIECES} from '../../utils/devInitBoards';
 import ControlPanel from '../../ui/game/ControlPanel';
 import {useRouter} from 'next/router';
 
-export default function App() {
+export default function Game() {
   const router = useRouter();
   const {sessionID: _sessionID} = router.query;
 
