@@ -1,11 +1,15 @@
 import {Provider} from 'react-redux';
-import Board from '../ui/game/Board';
-import {createGameStoreWithDefaultedBoard} from '../state/game/gameStore';
-import deserializeBoard from '../utils/deserializeBoard';
-import {CHESS_DEFAULT_PIECES} from '../utils/devInitBoards';
-import ControlPanel from '../ui/game/ControlPanel';
+import Board from '../../ui/game/Board';
+import {createGameStoreWithDefaultedBoard} from '../../state/game/gameStore';
+import deserializeBoard from '../../utils/deserializeBoard';
+import {CHESS_DEFAULT_PIECES} from '../../utils/devInitBoards';
+import ControlPanel from '../../ui/game/ControlPanel';
+import {useRouter} from 'next/router';
 
 export default function App() {
+  const router = useRouter();
+  const {sessionID: _sessionID} = router.query;
+
   const defaultedGameStore = createGameStoreWithDefaultedBoard(
     deserializeBoard(CHESS_DEFAULT_PIECES),
   );
@@ -14,6 +18,7 @@ export default function App() {
     <Provider store={defaultedGameStore}>
       <div
         style={{
+          boxSizing: 'border-box',
           display: 'grid',
           gridTemplateColumns: '1fr auto',
           height: '100vh',
@@ -23,6 +28,7 @@ export default function App() {
         }}>
         <div
           style={{
+            boxSizing: 'border-box',
             height: '100%',
             position: 'relative',
             width: '100%',
@@ -32,6 +38,7 @@ export default function App() {
         <div
           style={{
             borderLeft: '1px solid black',
+            boxSizing: 'border-box',
             height: '100%',
             width: 400,
           }}>
