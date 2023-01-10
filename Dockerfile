@@ -1,4 +1,4 @@
-FROM node:dubnium as builder
+FROM node:gallium as builder
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
