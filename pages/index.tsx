@@ -18,7 +18,7 @@ export default function Home() {
           width: 'fit-content',
         }}>
         <h1>Magichess</h1>
-        <Link href="/game/matchmake">Matchmake</Link>
+        <Link href="/matchmake">Matchmake</Link>
       </div>
     </div>
   );
