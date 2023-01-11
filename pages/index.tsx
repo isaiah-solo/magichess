@@ -1,6 +1,7 @@
+import {AuthAction, withAuthUser} from 'next-firebase-auth';
 import Link from 'next/link';
 
-export default function Home() {
+function Home() {
   return (
     <div
       style={{
@@ -23,3 +24,9 @@ export default function Home() {
     </div>
   );
 }
+
+export default withAuthUser({
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
+  whenUnauthedAfterInit: AuthAction.RENDER,
+})(Home);
