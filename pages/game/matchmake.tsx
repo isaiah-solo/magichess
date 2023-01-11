@@ -1,6 +1,4 @@
-import Link from 'next/link';
-
-export default function Home() {
+export default function Matchmake() {
   return (
     <div
       style={{
@@ -17,8 +15,7 @@ export default function Home() {
           transform: 'translateY(-50%) translateX(-50%)',
           width: 'fit-content',
         }}>
-        <h1>Magichess</h1>
-        <Link href="/game/matchmake">Matchmake</Link>
+        <h1>Waiting for player...</h1>
       </div>
     </div>
   );
