@@ -1,14 +1,13 @@
 import {Provider} from 'react-redux';
-import Board from '../../ui/game/Board';
-import {createGameStoreWithDefaultedBoard} from '../../state/game/gameStore';
-import deserializeBoard from '../../utils/deserializeBoard';
-import {CHESS_DEFAULT_PIECES} from '../../utils/devInitBoards';
-import ControlPanel from '../../ui/game/ControlPanel';
-import {useRouter} from 'next/router';
+import Board from '../ui/game/Board';
+import {createGameStoreWithDefaultedBoard} from '../state/game/gameStore';
+import deserializeBoard from '../utils/deserializeBoard';
+import {CHESS_DEFAULT_PIECES} from '../utils/devInitBoards';
+import ControlPanel from '../ui/game/ControlPanel';
 
 export default function Game() {
-  const router = useRouter();
-  const {sessionID: _sessionID} = router.query;
+  // const router = useRouter();
+  // const {sessionID: _sessionID} = router.query;
 
   const defaultedGameStore = createGameStoreWithDefaultedBoard(
     deserializeBoard(CHESS_DEFAULT_PIECES),
