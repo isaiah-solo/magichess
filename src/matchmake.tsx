@@ -15,7 +15,7 @@ export default function Matchmake() {
           transform: 'translateY(-50%) translateX(-50%)',
           width: 'fit-content',
         }}>
-        <h1>Waiting for player...</h1>
+        <h1>Waiting for player..</h1>
       </div>
     </div>
   );
