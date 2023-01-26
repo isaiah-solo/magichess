@@ -5,7 +5,6 @@ import {initFirebase} from './utils/initFirebase';
 const app = initFirebase();
 
 export default function App() {
-  // const userIsLoggedIn = useAuthUser().id !== null;
   const userIsLoggedIn = false;
 
   const auth = getAuth(app);
