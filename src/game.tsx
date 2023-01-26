@@ -1,9 +1,9 @@
 import {Provider} from 'react-redux';
-import Board from '../ui/game/Board';
-import {createGameStoreWithDefaultedBoard} from '../state/game/gameStore';
-import deserializeBoard from '../utils/deserializeBoard';
-import {CHESS_DEFAULT_PIECES} from '../utils/devInitBoards';
-import ControlPanel from '../ui/game/ControlPanel';
+import Board from './ui/game/Board';
+import {createGameStoreWithDefaultedBoard} from './state/game/gameStore';
+import deserializeBoard from './utils/deserializeBoard';
+import {CHESS_DEFAULT_PIECES} from './utils/devInitBoards';
+import ControlPanel from './ui/game/ControlPanel';
 
 export default function Game() {
   // const router = useRouter();
