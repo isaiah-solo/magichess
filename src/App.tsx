@@ -43,7 +43,7 @@ export default function App() {
   const isPendingUserSignIn = useIsPendingUserSignIn();
 
   if (isPendingUserSignIn) {
-    return <div>Loading...</div>;
+    return <div>Loading..</div>;
   }
 
   return <RouterProvider router={router} />;
