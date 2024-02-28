@@ -2,7 +2,7 @@ import {
   useCheckAndAssumeWinnerEffect,
   useSelectCurrentTurn,
   useSelectWinner,
-} from '../../state/game/gameSlice';
+} from '../../state/game/gameHooks';
 import Team from '../../models/pieces/Team';
 import styled from 'styled-components';
 

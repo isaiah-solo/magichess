@@ -1,4 +1,4 @@
-import {useBoardActions, useSelectSlots} from '../../state/game/boardSlice';
+import {useBoardActions, useSelectSlots} from '../../state/game/gameHooks';
 import {boardRangeMap} from '../../utils/coordinates';
 import Piece from './Piece';
 import PossibleMoveDot from './PossibleMoveDot';
@@ -10,7 +10,7 @@ import {
   useFinishTurn,
   useSelectCurrentTurn,
   useSelectWinner,
-} from '../../state/game/gameSlice';
+} from '../../state/game/gameHooks';
 import styled from 'styled-components';
 
 const StyledBoardDiv = styled.div`

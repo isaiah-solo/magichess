@@ -1,13 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import Piece from '../../models/pieces/Piece';
-import {boardSlice} from './boardSlice';
-import {gameSlice} from './gameSlice';
+import boardSlice from './boardSlice';
+import gameSlice from './gameSlice';
+import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof gameStore.getState>;
 
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type GameDispatch = typeof gameStore.dispatch;
+export const useGameDispatch: () => typeof gameStore.dispatch = useDispatch;
+export const useGameSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const gameStore = configureStore({
   reducer: {
