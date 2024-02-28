@@ -1,15 +1,36 @@
 import Button from '@mui/material/Button';
-import {getAuth, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  browserLocalPersistence,
+  User,
+} from 'firebase/auth';
 import {initFirebase} from './utils/initFirebase';
+import {useEffect, useState} from 'react';
 
 const app = initFirebase();
 
 export default function App() {
-  const userIsLoggedIn = false;
-
   const auth = getAuth(app);
 
-  console.log(auth.currentUser);
+  const [isPendingUser, setIsPendingUser] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
+  const isSignedIn = user !== null;
+
+  useEffect(() => {
+    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+      setUser(user);
+      setIsPendingUser(false);
+    });
+
+    return () => unregisterAuthObserver();
+  }, []);
+
+  if (isPendingUser) {
+    return <div>Loading</div>;
+  }
 
   return (
     <div
@@ -28,25 +49,15 @@ export default function App() {
           width: 'fit-content',
         }}>
         <h1>Magichess</h1>
-        {userIsLoggedIn ? (
+        {isSignedIn ? (
           <a href="/matchmake">Matchmake</a>
         ) : (
           <Button
             onClick={async () => {
               const provider = new GoogleAuthProvider();
 
-              const result = await signInWithPopup(auth, provider);
-
-              // This gives you a Google Access Token. You can use it to access the Google API.
-              const credential =
-                GoogleAuthProvider.credentialFromResult(result);
-
-              const token = credential?.accessToken;
-
-              // The signed-in user info.
-              const user = result.user;
-
-              console.log(user);
+              await auth.setPersistence(browserLocalPersistence);
+              await signInWithPopup(auth, provider);
             }}>
             Login with Google
           </Button>
