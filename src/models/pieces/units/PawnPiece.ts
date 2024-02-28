@@ -22,7 +22,7 @@ export default class PawnPiece extends Piece {
   }
 
   public getValidPositions(pos: BoardPos): BoardPos[][] {
-    const [_x, y] = posToCoordinates(pos);
+    const y = posToCoordinates(pos)[1];
 
     return multiPosPaths([
       this.getTeam() === Team.Two

@@ -38,7 +38,7 @@ export function upRangeMap(
   pos: BoardPos,
   cb: (idx: YPosNumber) => BoardPos | null,
 ): BoardPos[] {
-  const [_x, y] = posToCoordinates(pos);
+  const y = posToCoordinates(pos)[1];
 
   return compactMap(range(y).map(castY), cb);
 }
@@ -47,7 +47,7 @@ export function downRangeMap(
   pos: BoardPos,
   cb: (idx: YPosNumber) => BoardPos | null,
 ): BoardPos[] {
-  const [_x, y] = posToCoordinates(pos);
+  const y = posToCoordinates(pos)[1];
 
   return compactMap(range(8 - y - 1).map(castY), cb);
 }

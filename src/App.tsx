@@ -8,6 +8,7 @@ import {useAuthDispatch} from './state/auth/authStore';
 import {useEffect} from 'react';
 import {getApp} from 'firebase/app';
 import authSlice from './state/auth/authSlice';
+import Game from './pages/game';
 
 initFirebase();
 
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/game/:gameId',
+    element: <Game />,
   },
 ]);
 
@@ -33,7 +38,7 @@ export default function App() {
 
       dispatch(authSlice.actions.authenticateUser({userId: user.uid}));
     });
-  }, []);
+  }, [dispatch]);
 
   const isPendingUserSignIn = useIsPendingUserSignIn();
 

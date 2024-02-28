@@ -149,7 +149,7 @@ export const useBoardActions = (): BoardActions => {
 
   const checkIsCaptureValid = useCallback(
     (pos: BoardPos): boolean => validCaptures.hasOwnProperty(pos),
-    [validPositions],
+    [validCaptures],
   );
 
   return {
