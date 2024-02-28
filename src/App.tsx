@@ -8,27 +8,16 @@ import {
 } from 'firebase/auth';
 import {initFirebase} from './utils/initFirebase';
 import {useEffect, useState} from 'react';
+import useUserAuth from './hooks/useUserAuth';
 
 const app = initFirebase();
 
 export default function App() {
   const auth = getAuth(app);
 
-  const [isPendingUser, setIsPendingUser] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const {isPendingUserSignIn, isUserSignedIn, user} = useUserAuth(auth);
 
-  const isSignedIn = user !== null;
-
-  useEffect(() => {
-    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
-      setUser(user);
-      setIsPendingUser(false);
-    });
-
-    return () => unregisterAuthObserver();
-  }, []);
-
-  if (isPendingUser) {
+  if (isPendingUserSignIn) {
     return <div>Loading</div>;
   }
 
@@ -49,7 +38,7 @@ export default function App() {
           width: 'fit-content',
         }}>
         <h1>Magichess</h1>
-        {isSignedIn ? (
+        {isUserSignedIn ? (
           <a href="/matchmake">Matchmake</a>
         ) : (
           <Button
